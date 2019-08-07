@@ -1,4 +1,4 @@
-Bootstrap: library:q
+Bootstrap: library
 From: airl_lab/default/airl_env:base
 
 
