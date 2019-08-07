@@ -110,6 +110,8 @@ Eigen::Vector3d forward_model(Eigen::VectorXd a){
 
 int main(int argc, char **argv) 
 {   
+    tbb::task_scheduler_init init(48);
+    
     using namespace sferes;
     using namespace nn;
 
