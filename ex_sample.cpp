@@ -148,7 +148,7 @@ int main(int argc, char **argv)
     typedef qd::QualityDiversity<phen_t, eval_t, stat_t, modifier_t, select_t, container_t, Params> qd_t; 
     //typedef qd::MapElites<phen_t, eval_t, stat_t, modifier_t, Params> qd_t;
 
-    //qd_t qd;
+    qd_t qd;
     run_ea(argc, argv, qd); 
 
     //qd.run();
