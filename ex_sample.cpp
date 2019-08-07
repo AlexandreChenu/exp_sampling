@@ -42,7 +42,7 @@
 #include <sferes/run.hpp>
 #include <sferes/stat/best_fit.hpp>
 
-#include "/git/sferes2/exp/exp_sampling/best_fit_it.hpp"
+#include "best_fit_it.hpp"
 //#include "/git/sferes2/exp/exp_sampling/fit_behav.hpp"
 
 
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
     typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> weight_t;
     //typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> bias_t;
     typedef PfWSum<weight_t> pf_t;
-    typedef AfSigmoidNoBias<> af_t;
+    typedef AfTanhNoBias<> af_t;
     typedef sferes::gen::DnnFF<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t; // TODO : change by DnnFF in order to use only feed-forward neural networks
                                                                                        // TODO : change by hyper NN in order to test hyper NEAT 
     typedef phen::Dnn<gen_t, fit_t, Params> phen_t;
@@ -148,10 +148,10 @@ int main(int argc, char **argv)
     typedef qd::QualityDiversity<phen_t, eval_t, stat_t, modifier_t, select_t, container_t, Params> qd_t; 
     //typedef qd::MapElites<phen_t, eval_t, stat_t, modifier_t, Params> qd_t;
 
-    qd_t qd;
-    //run_ea(argc, argv, qd); 
+    //qd_t qd;
+    run_ea(argc, argv, qd); 
 
-    qd.run();
+    //qd.run();
     std::cout<<"best fitness:" << qd.stat<0>().best()->fit().value() << std::endl;
     std::cout<<"archive size:" << qd.stat<1>().archive().size() << std::endl;
 
