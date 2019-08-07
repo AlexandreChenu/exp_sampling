@@ -120,7 +120,7 @@ int main(int argc, char **argv)
     typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> weight_t;
     //typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> bias_t;
     typedef PfWSum<weight_t> pf_t;
-    typedef AfTanhNoBias<float> af_t;
+    typedef AfTanh<float> af_t;
     typedef sferes::gen::DnnFF<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t; // TODO : change by DnnFF in order to use only feed-forward neural networks
                                                                                        // TODO : change by hyper NN in order to test hyper NEAT 
     typedef phen::Dnn<gen_t, fit_t, Params> phen_t;
