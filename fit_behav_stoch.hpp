@@ -128,8 +128,8 @@ struct Params {
       // number of initial random points
       SFERES_CONST size_t init_size = 100; // nombre d'individus générés aléatoirement 
       SFERES_CONST size_t size = 100; // size of a batch
-      SFERES_CONST size_t nb_gen = 1001; // nbr de gen pour laquelle l'algo va tourner 
-      SFERES_CONST size_t dump_period = 200; 
+      SFERES_CONST size_t nb_gen = 15001; // nbr de gen pour laquelle l'algo va tourner 
+      SFERES_CONST size_t dump_period = 500; 
   };
 
   struct qd {
