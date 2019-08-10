@@ -120,7 +120,7 @@ int main(int argc, char **argv)
     typedef nn_mlp<Params> fit_t; 
 
     typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> weight_t;
-    //typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> bias_t;
+    typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> bias_t;
     typedef PfWSum<weight_t> pf_t;
     
     //typedef AfTanhNoBias<params::Dummy> af_t;
