@@ -98,10 +98,10 @@ struct Params {
   struct dnn {
     SFERES_CONST size_t nb_inputs = 5; // right/left and up/down sensors
     SFERES_CONST size_t nb_outputs  = 3; //usage of each joint
-    SFERES_CONST size_t min_nb_neurons  = 15;
-    SFERES_CONST size_t max_nb_neurons  = 50;
-    SFERES_CONST size_t min_nb_conns  = 20;
-    SFERES_CONST size_t max_nb_conns  = 80;
+    SFERES_CONST size_t min_nb_neurons  = 5;
+    SFERES_CONST size_t max_nb_neurons  = 30;
+    SFERES_CONST size_t min_nb_conns  = 5;
+    SFERES_CONST size_t max_nb_conns  = 30;
     SFERES_CONST float  max_weight  = 2.0f;
     SFERES_CONST float  max_bias  = 2.0f;
 
