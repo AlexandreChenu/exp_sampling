@@ -211,7 +211,8 @@ FIT_QD(nn_mlp){
             //DATA GO THROUGH NN
             ind.nn().init(); //init neural network 
             
-            for (int j = 0; j < ind.gen().get_depth() + 1; ++j) //In case of FFNN
+            //for (int j = 0; j < ind.gen().get_depth() + 1; ++j) //In case of FFNN
+   	    for (int j = 0; j < 100 + 1; ++j) //In case of NN
               ind.nn().step(inputs);
 
             Eigen::Vector3d output;
