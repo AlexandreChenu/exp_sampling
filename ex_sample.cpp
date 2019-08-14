@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     //typedef AfSigmoidBias<bias_t> af_t;
     //typedef AfTanhBias<bias_t> af_t;
     
-    //typedef sferes::gen::DnnFF<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t; // TODO : change by DnnFF in order to use only feed-forward neural networks
+    typedef sferes::gen::DnnFF<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t; // TODO : change by DnnFF in order to use only feed-forward neural networks
                                                                                        // TODO : change by hyper NN in order to test hyper NEAT 
     
     typedef sferes::gen::Dnn<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t;
