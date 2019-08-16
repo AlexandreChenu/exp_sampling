@@ -65,7 +65,8 @@
 #include <modules/nn2/gen_dnn.hpp>
 #include <modules/nn2/phen_dnn.hpp>
 
-#include <modules/nn2/gen_dnn_ff.hpp>
+//#include <modules/nn2/gen_dnn_ff.hpp>
+#include "gen_mlp.hpp"
 
 
 #include <cmath>
@@ -98,15 +99,15 @@ struct Params {
   struct dnn {
     SFERES_CONST size_t nb_inputs = 5; // right/left and up/down sensors
     SFERES_CONST size_t nb_outputs  = 3; //usage of each joint
-    SFERES_CONST size_t min_nb_neurons  = 15;
-    SFERES_CONST size_t max_nb_neurons  = 50;
-    SFERES_CONST size_t min_nb_conns  = 20;
-    SFERES_CONST size_t max_nb_conns  = 80;
-    SFERES_CONST float  max_weight  = 2.0f;
-    SFERES_CONST float  max_bias  = 2.0f;
+    SFERES_CONST size_t min_nb_neurons  = 4;
+    SFERES_CONST size_t max_nb_neurons  = 5;
+    SFERES_CONST size_t min_nb_conns  = 50;
+    SFERES_CONST size_t max_nb_conns  =  101;
+    //SFERES_CONST float  max_weight  = 0.0f;
+    //SFERES_CONST float  max_bias  = 0.0f;
 
     SFERES_CONST float m_rate_add_conn  = 1.0f;
-    SFERES_CONST float m_rate_del_conn  = 1.0f;
+    SFERES_CONST float m_rate_del_conn  = 0.1f;
     SFERES_CONST float m_rate_change_conn = 1.0f;
     SFERES_CONST float m_rate_add_neuron  = 1.0f;
     SFERES_CONST float m_rate_del_neuron  = 1.0f;
@@ -115,6 +116,12 @@ struct Params {
     //SFERES_CONST init_t init = random_topology;
     SFERES_CONST init_t init = ff;
   };
+
+  struct mlp {
+        SFERES_CONST size_t layer_0_size = 3;
+        SFERES_CONST size_t layer_1_size = 5;
+    };
+
 
     struct nov {
       SFERES_CONST size_t deep = 2;
@@ -128,7 +135,7 @@ struct Params {
       // number of initial random points
       SFERES_CONST size_t init_size = 100; // nombre d'individus générés aléatoirement 
       SFERES_CONST size_t size = 100; // size of a batch
-      SFERES_CONST size_t nb_gen = 10001; // nbr de gen pour laquelle l'algo va tourner 
+      SFERES_CONST size_t nb_gen = 5001; // nbr de gen pour laquelle l'algo va tourner 
       SFERES_CONST size_t dump_period = 500; 
   };
 
@@ -141,7 +148,7 @@ struct Params {
 
   struct sample {
 
-      SFERES_CONST size_t n_samples = 200; //nombre d'environements aléatoirement générés
+      SFERES_CONST size_t n_samples = 2; //nombre d'environements aléatoirement générés
       //Eigen::MatrixXd samples = cluster_sampling(100);
   };
 };
