@@ -148,7 +148,7 @@ struct Params {
 
   struct sample {
 
-      SFERES_CONST size_t n_samples = 2; //nombre d'environements aléatoirement générés
+      SFERES_CONST size_t n_samples = 230; //nombre d'environements aléatoirement générés
       //Eigen::MatrixXd samples = cluster_sampling(100);
   };
 };

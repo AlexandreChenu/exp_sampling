@@ -57,7 +57,10 @@
 #include <modules/nn2/mlp.hpp>
 #include <modules/nn2/gen_dnn.hpp>
 #include <modules/nn2/phen_dnn.hpp>
-#include <modules/nn2/gen_dnn_ff.hpp>
+
+//#include <modules/nn2/gen_dnn_ff.hpp>
+#include "gen_mlp.hpp"
+
 #include <cmath>
 #include <algorithm>
 #include <cstdlib>
@@ -70,7 +73,7 @@
 
 //#include "exp/examples2/ex_behav_nn.cpp"
 
-#include "fit_behav.hpp"
+#include "fit_behav_new.hpp"
 
 template <typename T>
 int get_depth(T & model) { 
@@ -90,7 +93,7 @@ int main(int argc, char **argv) {
   	//typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> bias_t;
   	typedef PfWSum<weight_t> pf_t;
   	typedef AfSigmoidNoBias<> af_t;
-  	typedef sferes::gen::DnnFF<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t; // TODO : change by DnnFF in order to use only feed-forward neural networks
+  	typedef sferes::gen::GenMlp<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t; // TODO : change by DnnFF in order to use only feed-forward neural networks
                                                                                        // TODO : change by hyper NN in order to test hyper NEAT 
   	typedef phen::Dnn<gen_t, fit_t, Params> phen_t;
 	typedef boost::archive::binary_iarchive ia_t;
@@ -99,7 +102,7 @@ int main(int argc, char **argv) {
 
 
 	//for (int i = 0; i<10 ; i++){
-	const std::string filename = "/git/sferes2/exp/ex_data/2019-08-14_20_27_35_20038/model_9000.bin";
+	const std::string filename = "./ex_sample_2019-08-16_10_25_26_1772/model_5000.bin";
 	//const std::string filename = "/git/sferes2/2019-08-13_14_10_56_1323/final_model_" + std::to_string(104+i) + ".bin";
 
 

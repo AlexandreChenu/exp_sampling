@@ -164,7 +164,8 @@ int main(int argc, char **argv)
     //qd.run();
     std::cout<<"best fitness:" << qd.stat<0>().best()->fit().value() << std::endl;
     std::cout<<"archive size:" << qd.stat<1>().archive().size() << std::endl;
-
+    std::cout << "number of connections of best model" << qd.stat<0>().best()->nn().get_nb_connections() << std::endl;
+    std::cout << "number of neurons of best model" << qd.stat<0>().best()->nn().get_nb_neurons() << std::endl;
     std::cout << "exp_sample...done" << std::endl;
     return 0;
 
