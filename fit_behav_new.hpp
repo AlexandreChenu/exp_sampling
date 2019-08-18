@@ -136,7 +136,7 @@ struct Params {
       SFERES_CONST size_t init_size = 100; // nombre d'individus générés aléatoirement 
       SFERES_CONST size_t size = 100; // size of a batch
       SFERES_CONST size_t nb_gen = 5001; // nbr de gen pour laquelle l'algo va tourner 
-      SFERES_CONST size_t dump_period = 500; 
+      SFERES_CONST size_t dump_period = 100; 
   };
 
   struct qd {
@@ -148,7 +148,7 @@ struct Params {
 
   struct sample {
 
-      SFERES_CONST size_t n_samples = 230; //nombre d'environements aléatoirement générés
+      SFERES_CONST size_t n_samples = 10; //nombre d'environements aléatoirement générés
       //Eigen::MatrixXd samples = cluster_sampling(100);
   };
 };

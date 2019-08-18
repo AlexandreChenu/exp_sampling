@@ -42,7 +42,7 @@
 #include <sferes/run.hpp>
 #include <sferes/stat/best_fit.hpp>
 
-#include "best_fit_it.hpp"
+//#include "best_fit_it.hpp"
 //#include "/git/sferes2/exp/exp_sampling/fit_behav.hpp"
 #include "best_fit_samp_div.hpp"
 
@@ -73,7 +73,8 @@
 #include <modules/nn2/gen_dnn.hpp>
 #include <modules/nn2/phen_dnn.hpp>
 
-#include <modules/nn2/gen_dnn_ff.hpp>
+//#include <modules/nn2/gen_dnn_ff.hpp>
+#include "gen_mlp.hpp"
 
 //#include <exp/examples2/phen_arm.hpp>
 

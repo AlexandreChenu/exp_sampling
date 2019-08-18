@@ -55,8 +55,9 @@ namespace sferes {
         
 
           std::string filename_in = "samples_cart.txt"; //file containing samples
-          std::ifstream input_file; 
-          input_file.open(filename_in);
+          
+	  std::ifstream input_file; 
+          input_file.open("/git/sferes2/exp/exp_sampling/samples_cart.txt");
 
           if (!input_file) { //quick check to see if the file is open
             std::cout << "Unable to open file " << filename_in;
