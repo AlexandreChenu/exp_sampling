@@ -115,6 +115,11 @@ struct Params {
     //SFERES_CONST init_t init = random_topology;
     SFERES_CONST init_t init = ff;
   };
+	
+  struct mlp {
+        SFERES_CONST size_t layer_0_size = 3;
+        SFERES_CONST size_t layer_1_size = 5;
+    };
 
     struct nov {
       SFERES_CONST size_t deep = 2;
