@@ -195,8 +195,10 @@ FIT_QD(nn_mlp){
 			stoch_samples.push_back(temp_samp);
 	}
 	
-	std::cout << "n_samp: " << stoch_samples.size() << std::endl;
-
+	//std::cout << "n_samp: " << stoch_samples.size() << std::endl;
+	
+	//for (int i = 0; i < stoch_samples.size(); i++)
+	//	std::cout << "samples: " << stoch_samples[i][0] << " " << stoch_samples[i][1] << std::endl; 
 
         for (int s = 0; s < Params::sample::n_samples ; ++s){ //iterate through several random environements
 
