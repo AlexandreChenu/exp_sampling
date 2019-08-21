@@ -11,7 +11,7 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 
-#include "fit_behav_new.hpp"
+#include "fit_behav_stoch.hpp"
 
 namespace sferes {
   namespace stat {
