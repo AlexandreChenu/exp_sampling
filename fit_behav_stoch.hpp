@@ -189,6 +189,8 @@ FIT_QD(nn_mlp){
 		if (sqrt(x*x + y*y) < 1)
 			stoch_samples.push_back(temp_samp);
 	}
+	
+	std::cout << "n_samp: " << stoch_samples.size() << std::endl;
 
 
         for (int s = 0; s < Params::sample::n_samples ; ++s){ //iterate through several random environements
