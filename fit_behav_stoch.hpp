@@ -174,8 +174,21 @@ FIT_QD(nn_mlp){
         //std::vector<double> zone3_exp(Params::sample::n_samples);
         Eigen::MatrixXd zones_exp(Params::sample::n_samples, 3);
         std::vector<double> bd_medians(3);
+	std::vector<std::vector<double>> stoch_samples;
 
-        Eigen::MatrixXd samples(Params::sample::n_samples,2); //init samples with cluster sampling 
+        Eigen::MatrixXd samples(Params::sample::n_samples,2); //init samples with sampling 
+	    
+	while (stoch_samples.size() < Params::sample::n_samples){
+		double x = 2*(((double) rand() / (RAND_MAX))-0.5);
+		double y = 2*(((double) rand() / (RAND_MAX))-0.5);
+		std::vector<double> temp_samp(2);
+		
+		temp_samp[0] = x;
+		temp_samp[1] = y;
+		
+		if (sqrt(x*x + y*y) < 1)
+			stoch_samples.push_back(temp_samp);
+	}
 
 
         for (int s = 0; s < Params::sample::n_samples ; ++s){ //iterate through several random environements
@@ -189,10 +202,11 @@ FIT_QD(nn_mlp){
 		        zone_exp[i] = 0;
 
           //Initialisation random du sample
-          double radius = ((double) rand() / (RAND_MAX)); //radius E[0,1]
-          double theta = 2*M_PI*(((double) rand() / (RAND_MAX))-0.5);
-          target[0] = radius*cos(theta);
-          target[1] = radius*sin(theta);
+          //double radius = ((double) rand() / (RAND_MAX)); //radius E[0,1]
+          //double theta = 2*M_PI*(((double) rand() / (RAND_MAX))-0.5);
+          
+	  target[0] = stoch_samples[s][0];
+          target[1] = stoch_samples[s][1];
 
           std::vector<float> inputs(5);//TODO : what input do we use for our Neural network?
 
