@@ -117,8 +117,8 @@ struct Params {
   };
 	
   struct mlp {
-        SFERES_CONST size_t layer_0_size = 3;
-        SFERES_CONST size_t layer_1_size = 5;
+        SFERES_CONST size_t layer_0_size = 10;
+        SFERES_CONST size_t layer_1_size = 10;
     };
 
     struct nov {
