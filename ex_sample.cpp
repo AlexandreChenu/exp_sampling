@@ -42,9 +42,9 @@
 #include <sferes/run.hpp>
 #include <sferes/stat/best_fit.hpp>
 
-#include "best_fit_it.hpp"
+//#include "best_fit_it.hpp"
 //#include "/git/sferes2/exp/exp_sampling/fit_behav.hpp"
-//#include "best_fit_samp_div.hpp"
+#include "best_fit_samp_div.hpp"
 
 
 #include <sferes/stat/qd_container.hpp>
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
     //typedef eval::Parallel<Params> eval_t; //parallel eval (faster)
  
     typedef boost::fusion::vector< 
-        stat::BestFitIt<phen_t, Params>, 
+        stat::BestFitSampDiv<phen_t, Params>, 
         //stat::BestFit<phen_t, Params>,
         stat::QdContainer<phen_t, Params>, 
         stat::QdProgress<phen_t, Params> 
