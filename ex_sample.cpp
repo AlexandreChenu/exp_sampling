@@ -144,8 +144,8 @@ int main(int argc, char **argv)
     typedef qd::container::SortBasedStorage< boost::shared_ptr<phen_t> > storage_t; 
     typedef qd::container::Archive<phen_t, storage_t, Params> container_t; 
 
-    typedef eval::Eval<Params> eval_t; //(useful for debbuging)
-    //typedef eval::Parallel<Params> eval_t; //parallel eval (faster)
+    //typedef eval::Eval<Params> eval_t; //(useful for debbuging)
+    typedef eval::Parallel<Params> eval_t; //parallel eval (faster)
  
     typedef boost::fusion::vector< 
         stat::BestFitSampDiv<phen_t, Params>, 

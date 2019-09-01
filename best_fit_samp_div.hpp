@@ -30,26 +30,6 @@ namespace sferes {
         //change it to depend from params 
         if (_cnt%Params::pop::dump_period == 0){ //for each dump period
 
-          typedef boost::archive::binary_oarchive oa_t;
-
-          std::cout << "writing...model" << std::endl;
-          const std::string fmodel = ea.res_dir() + "/model_" + std::to_string(_cnt) + ".bin";
-          {
-          std::ofstream ofs(fmodel, std::ios::binary);
-          oa_t oa(ofs);
-          //oa << model;
-          oa << *_best;
-          }
-          std::cout << "models written" << std::endl;
-
-          Eigen::MatrixXd work_zones_X (101,101) ; //creates two zones matrix containing zones' center position (between -1 and 1)
-          Eigen::MatrixXd work_zones_Y (101,101) ;
-        
-          for (float i = 0; i < 101; i+=1){ //init center of each zone
-            for (float j = 0; j < 101; j+=1){
-                work_zones_X(i,j) = (2*i-100)/100;
-                work_zones_Y(i,j) = (2*j-100)/100;
-          }}
 
           Eigen::MatrixXd zones_cnt = Eigen::MatrixXd::Zero(101,101);
         
@@ -64,8 +44,10 @@ namespace sferes {
             exit(1);}   // call system to stop
 
           int n_samp = Params::sample::n_samples;
-
-          for (int s=0; s < n_samp; s++){
+	  double mean_sum_zones;
+	  std::vector<double> sums_zones;
+	  
+          for (int s=0; s < 10; s++){
 
             Eigen::Vector3d target;
 
@@ -77,23 +59,34 @@ namespace sferes {
             target[2] = 0; 
 
             std::cout << "target is: " << target[0] << " " << target[1] << std::endl;
+	    
+	    Eigen::MatrixXd zones_cnt_int = Eigen::MatrixXd::Zero(101,101);
 
             for (int i = 0; i < ea.pop().size(); ++i){
-                zones_cnt += run_simu(*ea.pop()[i], target, work_zones_X, work_zones_Y);
+                zones_cnt_int += run_simu(*ea.pop()[i], target);
                 }
+
+	    int sum_zones = 0;
+
+            for (float i = 0; i < 101; i+=1){
+              for (float j = 0; j < 101; j+=1){
+                if (zones_cnt_int(i,j) != 0)
+                  sum_zones += 1;
+                }}
+
+	    sums_zones.push_back(sum_zones);
           }
 
           input_file.close();
+	  
 
-          int sum_zones = 0;
+	  double s =0;
+	  for(int i=0; i<sums_zones.size(); i++){
+		  s += sums_zones[i];}
 
-          for (float i = 0; i < 101; i+=1){
-            for (float j = 0; j < 101; j+=1){
-              if (zones_cnt(i,j) != 0)
-                sum_zones += 1;
-              }}
+	  mean_sum_zones = s/sums_zones.size();
 
-          double novelty_score = sum_zones;
+          double novelty_score = mean_sum_zones;
 
           std::cout << "novelty score is: " << novelty_score << std::endl;
           //std::cout << "save fitness" << std::endl;
@@ -138,7 +131,7 @@ namespace sferes {
 
 
     template <typename T>
-    Eigen::MatrixXd run_simu(T & model, Eigen::Vector3d target, Eigen::MatrixXd work_zones_X, Eigen::MatrixXd work_zones_Y) { 
+    Eigen::MatrixXd run_simu(T & model, Eigen::Vector3d target) { 
 
         //std::cout << "start initialization" << std::endl;
         Eigen::MatrixXd work_zones_cnt = Eigen::MatrixXd::Zero(101,101);
@@ -190,7 +183,7 @@ namespace sferes {
               //Eigen::Vector3d new_pos;
               prev_pos = forward_model(robot_angles); //remplacer pour ne pas l'appeler deux fois
 
-              std::cout << "Exhaustive zone search" << std::endl;
+              //std::cout << "Exhaustive zone search" << std::endl;
 
               int x_int = prev_pos[0]*100;
               int y_int = prev_pos[1]*100;
@@ -212,13 +205,7 @@ namespace sferes {
           
               work_zones_cnt(indx_X,indx_Y) ++;
 
-              if (sqrt(square(target.array() - prev_pos.array()).sum()) < 0.02){
-                dist -= sqrt(square(target.array() - prev_pos.array()).sum());}
-
-
-             else {
-                dist -= (log(1+t)) + (sqrt(square(target.array() - prev_pos.array()).sum()));}
-            }
+	}
 
         Eigen::Vector3d final_pos; 
         final_pos = forward_model(robot_angles);
@@ -226,11 +213,9 @@ namespace sferes {
         double out_fit;
 
         if (sqrt(square(target.array() - final_pos.array()).sum()) < 0.02){
-          out_fit = 1.0 + dist/500;
           return work_zones_cnt;} // -> 1
 
         else {
-          out_fit = dist/500;
           return Eigen::MatrixXd::Zero(101,101);} // -> 0
     }
 

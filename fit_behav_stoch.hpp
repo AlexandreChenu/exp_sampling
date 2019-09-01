@@ -117,8 +117,8 @@ struct Params {
   };
 	
   struct mlp {
-        SFERES_CONST size_t layer_0_size = 10;
-        SFERES_CONST size_t layer_1_size = 10;
+        SFERES_CONST size_t layer_0_size = 12;
+        SFERES_CONST size_t layer_1_size = 12;
     };
 
     struct nov {
@@ -201,7 +201,7 @@ FIT_QD(nn_mlp){
 	//	std::cout << "samples: " << stoch_samples[i][0] << " " << stoch_samples[i][1] << std::endl; 
 
         for (int s = 0; s < Params::sample::n_samples ; ++s){ //iterate through several random environements
-
+	  
           //init data
           double dist = 0; //initial cumulative distance equals to zero
           robot_angles = {0,M_PI,M_PI}; //init everytime at the same place
@@ -235,7 +235,7 @@ FIT_QD(nn_mlp){
             ind.nn().init(); //init neural network 
             
             //for (int j = 0; j < ind.gen().get_depth() + 1; ++j) //In case of FFNN
-   	    for (int j = 0; j < 100 + 1; ++j) //In case of NN
+   	    for (int j = 0; j < ind.gen().get_depth() + 1; ++j) //In case of NN
               ind.nn().step(inputs);
 
             Eigen::Vector3d output;
