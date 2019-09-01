@@ -29,7 +29,21 @@ namespace sferes {
 
         //change it to depend from params 
         if (_cnt%Params::pop::dump_period == 0){ //for each dump period
+	  
 
+	  typedef boost::archive::binary_oarchive oa_t;
+
+          std::cout << "writing...model" << std::endl;
+          const std::string fmodel = ea.res_dir() + "/model_" + std::to_string(_cnt) + ".bin";
+          {
+          std::ofstream ofs(fmodel, std::ios::binary);
+          oa_t oa(ofs);
+          //oa << model;
+          oa << *_best;
+          }
+	 
+
+	  std::cout << "models written" << std::endl;
 
           Eigen::MatrixXd zones_cnt = Eigen::MatrixXd::Zero(101,101);
         
