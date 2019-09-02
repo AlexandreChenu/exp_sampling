@@ -123,7 +123,7 @@ struct Params {
 
     struct nov {
       SFERES_CONST size_t deep = 2;
-      SFERES_CONST double l = 0.08; // TODO value ???
+      SFERES_CONST double l = 0.1; // TODO value ???
       SFERES_CONST double k = 25; // TODO right value?
       SFERES_CONST double eps = 0.1;// TODO right value??
   };
