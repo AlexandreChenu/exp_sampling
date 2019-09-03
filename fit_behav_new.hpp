@@ -118,14 +118,14 @@ struct Params {
   };
 
   struct mlp {
-        SFERES_CONST size_t layer_0_size = 3;
-        SFERES_CONST size_t layer_1_size = 5;
+        SFERES_CONST size_t layer_0_size = 10;
+        SFERES_CONST size_t layer_1_size = 10;
     };
 
 
     struct nov {
       SFERES_CONST size_t deep = 2;
-      SFERES_CONST double l = 0.08; // TODO value ???
+      SFERES_CONST double l = 0.1; // TODO value ???
       SFERES_CONST double k = 25; // TODO right value?
       SFERES_CONST double eps = 0.1;// TODO right value??
   };
@@ -148,7 +148,7 @@ struct Params {
 
   struct sample {
 
-      SFERES_CONST size_t n_samples = 200; //nombre d'environements aléatoirement générés
+      SFERES_CONST size_t n_samples = 233; //nombre d'environements aléatoirement générés
       //Eigen::MatrixXd samples = cluster_sampling(100);
   };
 };
