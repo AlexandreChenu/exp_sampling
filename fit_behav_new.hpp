@@ -237,8 +237,8 @@ FIT_QD(nn_mlp){
 
             Eigen::Vector3d output;
             for (int indx = 0; indx < 3; ++indx){
-              //output[indx] = 2*(ind.nn().get_outf(indx) - 0.5)*_vmax; //Remap to a speed between -v_max and v_max (speed is saturated)
-              output[indx] = ind.nn().get_outf(indx)*_vmax;
+              output[indx] = 2*(ind.nn().get_outf(indx) - 0.5)*_vmax; //Remap to a speed between -v_max and v_max (speed is saturated)
+              //output[indx] = ind.nn().get_outf(indx)*_vmax;
 	      robot_angles[indx] += output[indx]*_delta_t; //Compute new angles
             }
 
