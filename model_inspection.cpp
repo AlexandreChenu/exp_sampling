@@ -1,37 +1,3 @@
-//| This file is a part of the sferes2 framework.
-//| Copyright 2016, ISIR / Universite Pierre et Marie Curie (UPMC)
-//| Main contributor(s): Jean-Baptiste Mouret, mouret@isir.fr
-//|
-//| This software is a computer program whose purpose is to facilitate
-//| experiments in evolutionary computation and evolutionary robotics.
-//|
-//| This software is governed by the CeCILL license under French law
-//| and abiding by the rules of distribution of free software.  You
-//| can use, modify and/ or redistribute the software under the terms
-//| of the CeCILL license as circulated by CEA, CNRS and INRIA at the
-//| following URL "http://www.cecill.info".
-//|
-//| As a counterpart to the access to the source code and rights to
-//| copy, modify and redistribute granted by the license, users are
-//| provided only with a limited warranty and the software's author,
-//| the holder of the economic rights, and the successive licensors
-//| have only limited liability.
-//|
-//| In this respect, the user's attention is drawn to the risks
-//| associated with loading, using, modifying and/or developing or
-//| reproducing the software by the user in light of its specific
-//| status of free software, that may mean that it is complicated to
-//| manipulate, and that also therefore means that it is reserved for
-//| developers and experienced professionals having in-depth computer
-//| knowledge. Users are therefore encouraged to load and test the
-//| software's suitability as regards their requirements in conditions
-//| enabling the security of their systems and/or data to be ensured
-//| and, more generally, to use and operate it in the same conditions
-//| as regards security.
-//|
-//| The fact that you are presently reading this means that you have
-//| had knowledge of the CeCILL license and that you accept its terms.
-
 #include <iostream>
 #include <Eigen/Core>
 
@@ -83,6 +49,10 @@ int get_depth(T & model) {
 	return depth;
 }
 
+
+
+//Simply output some key information about a saved model 
+//Please, check Sferes2 and NN2 documentation if you wish to print other stuff (https://github.com/sferes2/nn2) 
 int main(int argc, char **argv) {
 
 	using namespace sferes;
@@ -100,11 +70,7 @@ int main(int argc, char **argv) {
 
 	phen_t model; 
 
-
-	//for (int i = 0; i<10 ; i++){
 	const std::string filename = "./ex_sample_2019-08-16_10_25_26_1772/model_5000.bin";
-	//const std::string filename = "/git/sferes2/2019-08-13_14_10_56_1323/final_model_" + std::to_string(104+i) + ".bin";
-
 
 	std::cout << "model...loading" << std::endl;
 	{
@@ -124,11 +90,6 @@ int main(int argc, char **argv) {
   std::cout << "number of connections: " << model.nn().get_nb_connections() << std::endl;
   std::cout << "number of neurons: " << model.nn().get_nb_neurons() << std::endl;
 
-//}
-  //std::cout << "number of depth: " << model.nn().get_graph() << std::endl; //pourquoi il n'accepte pas le get depth? 
-
-  //std::cout << "depth of nn: " << get_depth(model) << std::endl;
-  
   
   std::cout << "information gathering...done" << std::endl;
 

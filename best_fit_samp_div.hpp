@@ -261,11 +261,9 @@ namespace sferes {
 
 
     protected:
-      int _cnt = 0; //not sure if it is useful
+      int _cnt = 0; 
       boost::shared_ptr<Phen> _best;
       int _nbest = 3;
-      //Eigen::MatrixXd zones_occ = Eigen::MatrixXd::Zero(101,101);
-      //int _sum_zones = 0;
       std::vector<double> _nov_scores;
     };
   }

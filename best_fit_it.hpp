@@ -85,7 +85,7 @@ namespace sferes {
       }
 
     protected:
-      int _cnt = 0; //not sure if it is useful
+      int _cnt = 0; 
       boost::shared_ptr<Phen> _best;
       int _nbest = 3;
     };

@@ -1,37 +1,3 @@
-//| This file is a part of the sferes2 framework.
-//| Copyright 2016, ISIR / Universite Pierre et Marie Curie (UPMC)
-//| Main contributor(s): Jean-Baptiste Mouret, mouret@isir.fr
-//|
-//| This software is a computer program whose purpose is to facilitate
-//| experiments in evolutionary computation and evolutionary robotics.
-//|
-//| This software is governed by the CeCILL license under French law
-//| and abiding by the rules of distribution of free software.  You
-//| can use, modify and/ or redistribute the software under the terms
-//| of the CeCILL license as circulated by CEA, CNRS and INRIA at the
-//| following URL "http://www.cecill.info".
-//|
-//| As a counterpart to the access to the source code and rights to
-//| copy, modify and redistribute granted by the license, users are
-//| provided only with a limited warranty and the software's author,
-//| the holder of the economic rights, and the successive licensors
-//| have only limited liability.
-//|
-//| In this respect, the user's attention is drawn to the risks
-//| associated with loading, using, modifying and/or developing or
-//| reproducing the software by the user in light of its specific
-//| status of free software, that may mean that it is complicated to
-//| manipulate, and that also therefore means that it is reserved for
-//| developers and experienced professionals having in-depth computer
-//| knowledge. Users are therefore encouraged to load and test the
-//| software's suitability as regards their requirements in conditions
-//| enabling the security of their systems and/or data to be ensured
-//| and, more generally, to use and operate it in the same conditions
-//| as regards security.
-//|
-//| The fact that you are presently reading this means that you have
-//| had knowledge of the CeCILL license and that you accept its terms.
-
 #include <iostream>
 #include <Eigen/Core>
 
@@ -42,9 +8,11 @@
 #include <sferes/run.hpp>
 #include <sferes/stat/best_fit.hpp>
 
-//#include "best_fit_it.hpp"
-//#include "/git/sferes2/exp/exp_sampling/fit_behav.hpp"
-#include "best_fit_samp_div.hpp"
+//change this line according to the best_fit file you wish to use 
+//TODO: Move each best_fit to a new branch or merge everything 
+
+//#include "best_fit_it.hpp" //to save the best N models 
+#include "best_fit_samp_div.hpp" //to save fitness and diversity results
 
 
 #include <sferes/stat/qd_container.hpp>
@@ -84,8 +52,7 @@
 
 #include <cstdlib>
 
-//#include "/git/sferes2/exp/examples2/fit_behav.hpp"
-
+//forward model of a robot arm with N arms
 Eigen::Vector3d forward_model(Eigen::VectorXd a){
     
     Eigen::VectorXd _l_arm=Eigen::VectorXd::Ones(a.size()+1);
@@ -122,18 +89,19 @@ int main(int argc, char **argv)
     typedef nn_mlp<Params> fit_t; 
 
     typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> weight_t;
-    //typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> bias_t;
+    //typedef phen::Parameters<gen::EvoFloat<1, Params>, fit::FitDummy<>, Params> bias_t; //uncomment if bias is used in the activation function
+    
     typedef PfWSum<weight_t> pf_t;
     
-    //typedef AfTanhNoBias<params::Dummy> af_t;
-    typedef AfSigmoidNoBias<> af_t;
-    //typedef AfSigmoidBias<bias_t> af_t;
-    //typedef AfTanhBias<bias_t> af_t;
+    //typedef AfTanhNoBias<params::Dummy> af_t; //Tanh without bias
+    typedef AfSigmoidNoBias<> af_t; //Sigmoid without bias 
+    //typedef AfSigmoidBias<bias_t> af_t; //Sigmoid with bias
+    //typedef AfTanhBias<bias_t> af_t; //Tanh with bias
     
     typedef sferes::gen::GenMlp<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t; // TODO : change by DnnFF in order to use only feed-forward neural networks
                                                                                        // TODO : change by hyper NN in order to test hyper NEAT 
     
-    //typedef sferes::gen::Dnn<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t;
+    //typedef sferes::gen::Dnn<Neuron<pf_t, af_t>,  Connection<weight_t>, Params> gen_t; //unconstrained NN architecture
     
     typedef phen::Dnn<gen_t, fit_t, Params> phen_t;
     //typedef qd::selector::Uniform<phen_t, Params> select_t; //TODO : test other selector
@@ -163,7 +131,7 @@ int main(int argc, char **argv)
     qd_t qd;
     run_ea(argc, argv, qd); 
 
-    //qd.run();
+    //quick output of stats
     std::cout<<"best fitness:" << qd.stat<0>().best()->fit().value() << std::endl;
     std::cout<<"archive size:" << qd.stat<1>().archive().size() << std::endl;
     std::cout << "number of connections of best model" << qd.stat<0>().best()->nn().get_nb_connections() << std::endl;

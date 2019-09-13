@@ -1,4 +1,4 @@
-//
+// Author: Szymon Bryrch
 // Created by szymon on 06/08/19.
 //
 
