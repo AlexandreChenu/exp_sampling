@@ -1,37 +1,3 @@
-//| This file is a part of the sferes2 framework.
-//| Copyright 2016, ISIR / Universite Pierre et Marie Curie (UPMC)
-//| Main contributor(s): Jean-Baptiste Mouret, mouret@isir.fr
-//|
-//| This software is a computer program whose purpose is to facilitate
-//| experiments in evolutionary computation and evolutionary robotics.
-//|
-//| This software is governed by the CeCILL license under French law
-//| and abiding by the rules of distribution of free software.  You
-//| can use, modify and/ or redistribute the software under the terms
-//| of the CeCILL license as circulated by CEA, CNRS and INRIA at the
-//| following URL "http://www.cecill.info".
-//|
-//| As a counterpart to the access to the source code and rights to
-//| copy, modify and redistribute granted by the license, users are
-//| provided only with a limited warranty and the software's author,
-//| the holder of the economic rights, and the successive licensors
-//| have only limited liability.
-//|
-//| In this respect, the user's attention is drawn to the risks
-//| associated with loading, using, modifying and/or developing or
-//| reproducing the software by the user in light of its specific
-//| status of free software, that may mean that it is complicated to
-//| manipulate, and that also therefore means that it is reserved for
-//| developers and experienced professionals having in-depth computer
-//| knowledge. Users are therefore encouraged to load and test the
-//| software's suitability as regards their requirements in conditions
-//| enabling the security of their systems and/or data to be ensured
-//| and, more generally, to use and operate it in the same conditions
-//| as regards security.
-//|
-//| The fact that you are presently reading this means that you have
-//| had knowledge of the CeCILL license and that you accept its terms.
-
 #include <iostream>
 #include <fstream>
 #include <Eigen/Core>
@@ -78,7 +44,7 @@ using namespace sferes;
 using namespace sferes::gen::dnn;
 using namespace sferes::gen::evo_float;
 
-struct Params {
+struct Params { //please refer to fit_behav_new for more information about the following parameters
   struct evo_float {
     SFERES_CONST float mutation_rate = 0.3f;
     SFERES_CONST float cross_rate = 0.1f;
@@ -128,26 +94,24 @@ struct Params {
       SFERES_CONST double eps = 0.1;// TODO right value??
   };
 
-  // TODO: move to a qd::
   struct pop {
       // number of initial random points
-      SFERES_CONST size_t init_size = 100; // nombre d'individus générés aléatoirement 
-      SFERES_CONST size_t size = 100; // size of a batch
-      SFERES_CONST size_t nb_gen = 10001; // nbr de gen pour laquelle l'algo va tourner 
+      SFERES_CONST size_t init_size = 100;  
+      SFERES_CONST size_t size = 100; 
+      SFERES_CONST size_t nb_gen = 10001; 
       SFERES_CONST size_t dump_period = 500; 
   };
 
   struct qd {
 
       SFERES_CONST size_t dim = 3;
-      SFERES_CONST size_t behav_dim = 3; //taille du behavior descriptor
+      SFERES_CONST size_t behav_dim = 3; 
       SFERES_ARRAY(size_t, grid_shape, 100, 100, 100);
   };
 
   struct sample {
 
-      SFERES_CONST size_t n_samples = 200; //nombre d'environements aléatoirement générés
-      //Eigen::MatrixXd samples = cluster_sampling(100);
+      SFERES_CONST size_t n_samples = 200;
   };
 };
 
@@ -162,28 +126,21 @@ FIT_QD(nn_mlp){
       //void eval(Indiv & ind, IO & input, IO & target){ //ind : altered phenotype
       void eval(Indiv & ind){ //ind : altered phenotype
 
-        //std::cout << "EVALUATION" << std::endl;
 
-        Eigen::Vector3d robot_angles;
-        Eigen::Vector3d target;
-        std::vector<double> fits(Params::sample::n_samples);
-        std::vector<double> zone_exp(3);
+        Eigen::Vector3d robot_angles; //angle of the joints at the current time-step
+        Eigen::Vector3d target; //target position
+        std::vector<double> fits(Params::sample::n_samples); //fitness obtained for the different sampled targets
+        std::vector<double> zone_exp(3); //vector of zones exploration
         std::vector<double> res(3);
 
-        // double sum_dist = 0;
-        // double mean_dist = 0;
-        // Eigen::Vector3d sum_motor_usage;
-        double fit_median;
-        //std::vector<double> zone1_exp(Params::sample::n_samples);
-        //std::vector<double> zone2_exp(Params::sample::n_samples);
-        //std::vector<double> zone3_exp(Params::sample::n_samples);
-        Eigen::MatrixXd zones_exp(Params::sample::n_samples, 3);
-        std::vector<double> bd_medians(3);
-	std::vector<std::vector<double>> stoch_samples;
+        double fit_median; //median of the fitness
+        Eigen::MatrixXd zones_exp(Params::sample::n_samples, 3); //zones exploration for the different sampled targets
+        std::vector<double> bd_medians(3); //behavior descriptor median
+	std::vector<std::vector<double>> stoch_samples; 
 
-        Eigen::MatrixXd samples(Params::sample::n_samples,2); //init samples with sampling 
+        Eigen::MatrixXd samples(Params::sample::n_samples,2); //matrix of sampled targets 
 	    
-	while (stoch_samples.size() < Params::sample::n_samples){
+	while (stoch_samples.size() < Params::sample::n_samples){ //fill sampled targets matrix
 		double x = 2*(((double) rand() / (RAND_MAX))-0.5);
 		double y = 2*(((double) rand() / (RAND_MAX))-0.5);
 		std::vector<double> temp_samp(2);
@@ -194,11 +151,6 @@ FIT_QD(nn_mlp){
 		if (sqrt(x*x + y*y) < 1)
 			stoch_samples.push_back(temp_samp);
 	}
-	
-	//std::cout << "n_samp: " << stoch_samples.size() << std::endl;
-	
-	//for (int i = 0; i < stoch_samples.size(); i++)
-	//	std::cout << "samples: " << stoch_samples[i][0] << " " << stoch_samples[i][1] << std::endl; 
 
         for (int s = 0; s < Params::sample::n_samples ; ++s){ //iterate through several random environements
 	  
@@ -207,17 +159,13 @@ FIT_QD(nn_mlp){
           robot_angles = {0,M_PI,M_PI}; //init everytime at the same place
           Eigen::Vector3d pos_init = forward_model(robot_angles); //initial position
 
-	        for (int i=0; i< 3; i++)
+	        for (int i=0; i< 3; i++) //initialize zones with zero values
 		        zone_exp[i] = 0;
-
-          //Initialisation random du sample
-          //double radius = ((double) rand() / (RAND_MAX)); //radius E[0,1]
-          //double theta = 2*M_PI*(((double) rand() / (RAND_MAX))-0.5);
           
-	  target[0] = stoch_samples[s][0];
+	  target[0] = stoch_samples[s][0];// get target nbr s position
           target[1] = stoch_samples[s][1];
 
-          std::vector<float> inputs(5);//TODO : what input do we use for our Neural network?
+          std::vector<float> inputs(5);// front/side distances + joints angles
 
           for (int t=0; t< _t_max/_delta_t; ++t){ //iterate through time
 
@@ -234,8 +182,7 @@ FIT_QD(nn_mlp){
             //DATA GO THROUGH NN
             ind.nn().init(); //init neural network 
             
-            //for (int j = 0; j < ind.gen().get_depth() + 1; ++j) //In case of FFNN
-   	    for (int j = 0; j < ind.gen().get_depth() + 1; ++j) //In case of NN
+   	    for (int j = 0; j < ind.gen().get_depth() + 1; ++j) //In case of FFNN (remove get_depth if DNN genotype)
               ind.nn().step(inputs);
 
             Eigen::Vector3d output;
@@ -246,8 +193,8 @@ FIT_QD(nn_mlp){
 
             new_pos = forward_model(robot_angles);
 
-            res = get_zone(pos_init, target, new_pos);
-            zone_exp[0] = zone_exp[0] + res[0];
+            res = get_zone(pos_init, target, new_pos); //compute zone occupation
+            zone_exp[0] = zone_exp[0] + res[0]; // update zone exploration
             zone_exp[1] = zone_exp[1] + res[1];
             zone_exp[2] = zone_exp[2] + res[2];
 
@@ -261,13 +208,13 @@ FIT_QD(nn_mlp){
           else {
               dist -= log(1+t) + sqrt(square(target.array() - new_pos.array()).sum());
           }
-        } //end for all time-steps
+        } //end for all time-steps (cumulative distance updated)
 
         Eigen::Vector3d final_pos; 
         final_pos = forward_model(robot_angles);
 
         if (sqrt(square(target.array() - final_pos.array()).sum()) < 0.02){
-          fits[s] = 1.0 + dist/500; // -> 1
+          fits[s] = 1.0 + dist/500; // non-continuity to force successful solutions
         }
         else {
           fits[s] = dist/500; // -> 0
@@ -278,9 +225,9 @@ FIT_QD(nn_mlp){
         zones_exp(s,2) = zone_exp[2]/(_t_max/_delta_t);
         } //end for all samples 
 
-        fit_median = median(fits);
+        fit_median = median(fits); //compute median of fitness
 
-        int index = geometric_median(zones_exp);
+        int index = geometric_median(zones_exp); //computed geometric median of behavior descriptor
 
         bd_medians[0] = zones_exp(index,0); //geometric median is approximated 
         bd_medians[1] = zones_exp(index,1); 
@@ -294,6 +241,7 @@ FIT_QD(nn_mlp){
         this->set_desc(desc); //mean usage of each motor
       }
 
+//median computation function
   double median(std::vector<double> &v)
   {
     size_t n = v.size() / 2;
@@ -301,41 +249,7 @@ FIT_QD(nn_mlp){
     return v[n];
   }
 
-  Eigen::MatrixXd cluster_sampling(int n_s)
-  { 
-    Eigen::MatrixXd samples(n_s,2);
-
-    double dist = 0;
-    double radius = 0;
-    double theta = 0;
-
-    for (int i=0; i < n_s/4; ++i){
-      radius = 0.25*((double) rand() / (RAND_MAX)); //radius E[0,1]
-      theta = 2*M_PI*(((double) rand() / (RAND_MAX))-0.5);
-      samples(i,0) = radius*cos(theta);
-      samples(i,1) = radius*sin(theta);
-    }
-    for (int i=n_s/4; i< n_s/2 ; ++i){
-      radius = 0.25*((double) rand() / (RAND_MAX)) + 0.25 ; //radius E[0,1]
-      theta = 2*M_PI*(((double) rand() / (RAND_MAX))-0.5);
-      samples(i,0) = radius*cos(theta);
-      samples(i,1) = radius*sin(theta);
-    }
-    for (int i=n_s/2; i< 3*n_s/4 ; ++i){
-      radius = 0.25*((double) rand() / (RAND_MAX)) + 0.5; //radius E[0,1]
-      theta = 2*M_PI*(((double) rand() / (RAND_MAX))-0.5);
-      samples(i,0) = radius*cos(theta);
-      samples(i,1) = radius*sin(theta);
-    }
-    for (int i=3*n_s/4; i< n_s ; ++i){
-      radius = 0.25*((double) rand() / (RAND_MAX)) + 0.75; //radius E[0,1]
-      theta = 2*M_PI*(((double) rand() / (RAND_MAX))-0.5);
-      samples(i,0) = radius*cos(theta);
-      samples(i,1) = radius*sin(theta);
-    }
-    return samples;
-  }
-
+//n-arm robot arm forward model
   Eigen::Vector3d forward_model(Eigen::VectorXd a){
     
     Eigen::VectorXd _l_arm=Eigen::VectorXd::Ones(a.size()+1);
@@ -360,6 +274,7 @@ FIT_QD(nn_mlp){
 
   }
 
+//zone computation function (refer to sketch to fully understand the code)
 std::vector<double> get_zone(Eigen::Vector3d start, Eigen::Vector3d target, Eigen::Vector3d pos){
     
     
@@ -381,9 +296,7 @@ std::vector<double> get_zone(Eigen::Vector3d start, Eigen::Vector3d target, Eige
     D = *std::min_element(distances.begin(), distances.end()); //get minimal distance
     
     Eigen::Vector3d vO2_M_R0; //vector 02M in frame R0; (cf sketch on page 4)
-    //vO2_M_R0[0] = pos[0] - start[0];
     vO2_M_R0[0] = pos[0];
-    //vO2_M_R0[1] = pos[1] - start[1];
     vO2_M_R0[1] = pos[1];
     vO2_M_R0[2] = 1;
     
@@ -437,22 +350,18 @@ std::vector<double> get_zone(Eigen::Vector3d start, Eigen::Vector3d target, Eige
     }
 }
 
+//geometric median computation function
 double geometric_median (Eigen::MatrixXd samples){
     
     int n_samples = Params::sample::n_samples;
-    //int dim = 3;
     Eigen::MatrixXd distances(n_samples,n_samples);
     std::vector<double> sum_dists(n_samples);
     
     for (int i=0; i<n_samples; i++){ //get all distances
-        //std::cout << "debug i: " << i << std::endl;
         for (int j = i; j < n_samples; j++){
-            //std::cout << "debug j: " << j << std::endl;
             distances(i,j) = sqrt((samples(i,0)-samples(j,0))*(samples(i,0)-samples(j,0)) + (samples(i,1)-samples(j,1))*(samples(i,1)-samples(j,1)) +(samples(i,2)-samples(j,2))*(samples(i,2)-samples(j,2)));
-            //std::cout << "debug distance: " << distances(i,j) << std::endl;
             distances(j,i) = distances(i,j);}
     }
-    //std::cout << "out distances: " << distances << std::endl;
     
     for (int row=0; row<n_samples; row++){ //compute sum of distances
         double sum =0;
@@ -461,7 +370,6 @@ double geometric_median (Eigen::MatrixXd samples){
         }
         sum_dists[row] = sum;
     }
-    //std::cout << "out sum distances: " << sum_dists[0] << " " << sum_dists[1] << " " << sum_dists[2] << " " << sum_dists[3] << std::endl;
     
     double min_sample;
     min_sample = *std::min_element(sum_dists.begin(), sum_dists.end()); //get minimal distance
@@ -470,15 +378,12 @@ double geometric_median (Eigen::MatrixXd samples){
     while(sum_dists[ind] != min_sample){
         ind+=1;
     }
-    //std::cout << "indice: " << ind << std::endl;
     
     return ind;
 }
 
 private:
-  //std::default_random_engine generator; 
-  //std::uniform_real_distribution<double> distribution(-1.0,1.0);
   double _vmax = 1;
   double _delta_t = 0.1;
-  double _t_max = 10; //TMax guidé poto
+  double _t_max = 10; 
 };
